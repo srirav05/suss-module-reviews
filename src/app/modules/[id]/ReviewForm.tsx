@@ -42,20 +42,21 @@ export default function ReviewForm({ moduleId }: { moduleId: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border rounded p-4 mb-6 space-y-3">
+    <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-5 mb-6 space-y-3 shadow-sm">
       <h3 className="font-semibold">Leave a review</h3>
 
-      <select
-        value={rating}
-        onChange={(e) => setRating(Number(e.target.value))}
-        className="border rounded px-2 py-1"
-      >
-        <option value={5}>5 - Excellent</option>
-        <option value={4}>4 - Good</option>
-        <option value={3}>3 - Average</option>
-        <option value={2}>2 - Poor</option>
-        <option value={1}>1 - Terrible</option>
-      </select>
+      <div className="flex gap-1">
+  {[1, 2, 3, 4, 5].map((star) => (
+    <button
+      key={star}
+      type="button"
+      onClick={() => setRating(star)}
+      className={`text-2xl ${star <= rating ? 'text-yellow-400' : 'text-gray-300'}`}
+    >
+      ★
+    </button>
+  ))}
+</div>
 
       <textarea
         placeholder="Write your review..."

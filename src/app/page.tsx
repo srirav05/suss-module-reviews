@@ -7,8 +7,13 @@ export default async function HomePage() {
     .select('*')
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6">
-      <h1 className="text-3xl font-bold mb-6">SUSS ICT Module Reviews</h1>
+    <div className="max-w-3xl mx-auto mt-12 px-6">
+      <div className="mb-10">
+        <h1 className="text-4xl font-bold tracking-tight">SUSS ICT Module Reviews</h1>
+        <p className="text-gray-500 mt-2">
+          Real reviews from ICT students, for ICT students.
+        </p>
+      </div>
 
       {error && (
         <p className="text-red-500">Error loading modules: {error.message}</p>
@@ -18,15 +23,19 @@ export default async function HomePage() {
         <p className="text-gray-500">No modules added yet.</p>
       )}
 
-      <div className="space-y-4">
-{modules?.map((module) => (
-  <Link key={module.id} href={`/modules/${module.id}`}>
-    <div className="border rounded p-4 hover:bg-gray-50 cursor-pointer">
-      <h2 className="text-xl font-semibold">{module.code}</h2>
-      <p className="text-gray-700">{module.title}</p>
-      <p className="text-sm text-gray-500">{module.category}</p>
-    </div>
-    </Link>
+      <div className="grid gap-4">
+        {modules?.map((module) => (
+          <Link key={module.id} href={`/modules/${module.id}`}>
+            <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-gray-300 transition-all cursor-pointer">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">{module.code}</h2>
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                  {module.category}
+                </span>
+              </div>
+              <p className="text-gray-700 mt-1">{module.title}</p>
+            </div>
+          </Link>
         ))}
       </div>
     </div>

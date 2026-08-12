@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import ReviewForm from './ReviewForm'
+import Link from 'next/link'
 
 export default async function ModuleDetailPage({
   params,
@@ -25,13 +26,19 @@ export default async function ModuleDetailPage({
   }
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6">
-      <h1 className="text-2xl font-bold">{module.code}</h1>
-      <p className="text-lg text-gray-700">{module.title}</p>
-      <p className="text-gray-500 mb-6">{module.description}</p>
+    <div className="max-w-2xl mx-auto mt-12 px-6">
+      <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">
+        ← Back to modules
+      </Link>
+
+      <div className="mt-4 mb-8">
+        <h1 className="text-3xl font-bold">{module.code}</h1>
+        <p className="text-lg text-gray-700 mt-1">{module.title}</p>
+        <p className="text-gray-500 mt-2">{module.description}</p>
+      </div>
 
       <h2 className="text-xl font-semibold mb-3">Reviews</h2>
-      
+
       <ReviewForm moduleId={id} />
 
       {reviews && reviews.length === 0 && (
@@ -40,9 +47,18 @@ export default async function ModuleDetailPage({
 
       <div className="space-y-3">
         {reviews?.map((review) => (
-          <div key={review.id} className="border rounded p-3">
-            <p className="font-semibold">Rating: {review.rating} / 5</p>
-            <p>{review.review_text}</p>
+          <div key={review.id} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div className="flex gap-0.5 mb-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  className={star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+            <p className="text-gray-700">{review.review_text}</p>
           </div>
         ))}
       </div>

@@ -31,7 +31,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="border-b px-6 py-4 flex justify-between items-center">
+ <nav className="border-b border-gray-200 bg-white px-6 py-4 flex justify-between items-center sticky top-0 z-10">
       <Link href="/" className="font-bold text-lg">
         SUSS Module Reviews
       </Link>
@@ -42,7 +42,7 @@ export default function Navbar() {
             <span className="text-sm text-gray-600">{user.email}</span>
             <button
               onClick={handleLogout}
-              className="text-sm bg-black text-white px-3 py-1.5 rounded"
+              className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg transition-colors"
             >
               Log Out
             </button>
@@ -50,7 +50,7 @@ export default function Navbar() {
         ) : (
           <Link
             href="/login"
-            className="text-sm bg-black text-white px-3 py-1.5 rounded"
+            className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg transition-colors"
           >
             Log In
           </Link>

@@ -72,7 +72,7 @@ export default function ReviewForm({ moduleId }: { moduleId: string }) {
       <button
         type="submit"
         disabled={loading}
-        className="bg-black text-white px-4 py-2 rounded"
+        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
       >
         {loading ? 'Submitting...' : 'Submit Review'}
       </button>

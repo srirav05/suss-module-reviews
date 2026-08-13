@@ -52,7 +52,7 @@ export default function LoginPage() {
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
           type="submit"
-          className="w-full bg-black text-white rounded py-2"
+         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 transition-colors"
         >
           {isSignUp ? 'Sign Up' : 'Log In'}
         </button>

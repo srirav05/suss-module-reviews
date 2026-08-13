@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [isSignUp, setIsSignUp] = useState(false)
   const [error, setError] = useState('')
+  const [message, setMessage] = useState('')
   const router = useRouter()
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -26,6 +27,21 @@ export default function LoginPage() {
       router.refresh()
     }
   }
+  const handleForgotPassword = async () => {
+  if (!email) {
+    setError('Enter your email above first, then click "Forgot password?"')
+    return
+  }
+  setError('')
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/reset-password`,
+  })
+  if (error) {
+    setError(error.message)
+  } else {
+    setMessage('Check your email for a password reset link.')
+  }
+}
 
   return (
     <div className="max-w-md mx-auto mt-20 p-6">
@@ -50,6 +66,7 @@ export default function LoginPage() {
           required
         />
         {error && <p className="text-red-500 text-sm">{error}</p>}
+        {message && <p className="text-green-600 text-sm">{message}</p>}
         <button
           type="submit"
          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 transition-colors"
@@ -57,12 +74,21 @@ export default function LoginPage() {
           {isSignUp ? 'Sign Up' : 'Log In'}
         </button>
       </form>
-      <button
-        onClick={() => setIsSignUp(!isSignUp)}
-        className="text-sm text-blue-500 mt-4"
-      >
-        {isSignUp ? 'Already have an account? Log in' : "Don't have an account? Sign up"}
-      </button>
+<button
+  onClick={() => setIsSignUp(!isSignUp)}
+  className="text-sm text-blue-500 mt-4 block"
+>
+  {isSignUp ? 'Already have an account? Log in' : "Don't have an account? Sign up"}
+</button>
+
+{!isSignUp && (
+  <button
+    onClick={handleForgotPassword}
+    className="text-sm text-gray-500 mt-2 block"
+  >
+    Forgot password?
+  </button>
+)}
     </div>
   )
 }

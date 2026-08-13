@@ -1,6 +1,8 @@
+import ReviewCard from './ReviewCard'
 import { supabase } from '@/lib/supabase'
 import ReviewForm from './ReviewForm'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase-server'
 
 export default async function ModuleDetailPage({
   params,
@@ -20,6 +22,8 @@ export default async function ModuleDetailPage({
     .select('*')
     .eq('module_id', id)
     .order('created_at', { ascending: false })
+  const supabaseServer = await createClient()
+  const { data: { user } } = await supabaseServer.auth.getUser()
 
   if (!module) {
     return <div className="p-6">Module not found.</div>
@@ -45,23 +49,15 @@ export default async function ModuleDetailPage({
         <p className="text-gray-500">No reviews yet. Be the first!</p>
       )}
 
-      <div className="space-y-3">
-        {reviews?.map((review) => (
-          <div key={review.id} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-            <div className="flex gap-0.5 mb-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <span
-                  key={star}
-                  className={star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}
-                >
-                  ★
-                </span>
-              ))}
-            </div>
-            <p className="text-gray-700">{review.review_text}</p>
-          </div>
-        ))}
-      </div>
+<div className="space-y-3">
+  {reviews?.map((review) => (
+    <ReviewCard
+      key={review.id}
+      review={review}
+      isOwner={user?.id === review.user_id}
+    />
+  ))}
+</div>
     </div>
   )
 }

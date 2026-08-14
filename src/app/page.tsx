@@ -1,9 +1,10 @@
+import ModuleAssistant from './ModuleAssistant'
 import { supabase } from '@/lib/supabase'
 import ModuleList from './ModuleList'
 
 export default async function HomePage() {
   const { data: modules, error } = await supabase.from('modules').select('*')
-  const { data: reviews } = await supabase.from('reviews').select('module_id, rating')
+  const { data: reviews } = await supabase.from('reviews').select('module_id, rating, review_text')
 
   const ratingsMap: Record<number, { avg: string; count: number }> = {}
 
@@ -26,6 +27,7 @@ export default async function HomePage() {
 
       {error && <p className="text-red-500">Error loading modules: {error.message}</p>}
 
+      {modules && reviews && <ModuleAssistant modules={modules} reviews={reviews} />}
       {modules && <ModuleList modules={modules} ratingsMap={ratingsMap} />}
     </div>
   )

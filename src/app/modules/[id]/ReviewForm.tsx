@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { containsInappropriateContent } from '@/lib/moderation'
 
 export default function ReviewForm({ moduleId }: { moduleId: string }) {
   const [rating, setRating] = useState(5)
@@ -23,6 +24,11 @@ export default function ReviewForm({ moduleId }: { moduleId: string }) {
       setLoading(false)
       return
     }
+    if (containsInappropriateContent(reviewText)) {
+    setError('Your review contains inappropriate language. Please revise it before submitting.')
+    setLoading(false)
+    return
+  }
 
     const { error } = await supabase.from('reviews').insert({
       module_id: moduleId,

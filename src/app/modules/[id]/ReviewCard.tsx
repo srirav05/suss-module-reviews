@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import { containsInappropriateContent } from '@/lib/moderation'
 
 type Review = {
   id: number
@@ -23,19 +24,29 @@ export default function ReviewCard({
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  const handleUpdate = async () => {
-    setLoading(true)
-    const { error } = await supabase
-      .from('reviews')
-      .update({ rating, review_text: reviewText })
-      .eq('id', review.id)
+  const [error, setError] = useState('')
+const handleUpdate = async () => {
+  setError('')
 
-    setLoading(false)
-    if (!error) {
-      setIsEditing(false)
-      router.refresh()
-    }
+  if (containsInappropriateContent(reviewText)) {
+    setError('Your review contains inappropriate language. Please revise it before saving.')
+    return
   }
+
+  setLoading(true)
+  const { error: updateError } = await supabase
+    .from('reviews')
+    .update({ rating, review_text: reviewText })
+    .eq('id', review.id)
+
+  setLoading(false)
+  if (!updateError) {
+    setIsEditing(false)
+    router.refresh()
+  } else {
+    setError(updateError.message)
+  }
+}
 
   const handleDelete = async () => {
     if (!confirm('Delete this review? This cannot be undone.')) return
@@ -66,6 +77,7 @@ export default function ReviewCard({
           className="w-full border rounded px-3 py-2"
           rows={3}
         />
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <div className="flex gap-2">
           <button
             onClick={handleUpdate}

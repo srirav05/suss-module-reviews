@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SUSS Module Reviews
 
-## Getting Started
+A full-stack web app where SUSS ICT students can browse modules, search/filter them, read reviews from other students and submit their own ratings after logging in. It also include a rule-based module recommendation assistant and content moderation for reviews.
 
-First, run the development server:
+**Live demo:** [suss-module-reviews.vercel.app](https://suss-module-reviews.vercel.app)
+
+> An independent student project — not affiliated with or endorsed by SUSS.
+
+## Features
+
+- Browse and search/filter ICT modules by name or category
+- View module details and read reviews from other students
+- Sign up / log in / log out, with password reset support
+- Submit a star rating and written review (only when logged in)
+- Edit or delete your own reviews
+- Content moderation blocks inappropriate language in reviews
+- "Module Assistant" recommends modules based on a free-text question, using a custom rule-based matching algorithm (no paid AI API)
+- Average ratings shown on each module card
+- Loading skeleton states, custom favicon, and a consistent design system
+
+## Tech Stack
+
+- **Frontend:** Next.js (App Router), React, TypeScript, Tailwind CSS
+- **Backend/Database:** Supabase (Postgres, Auth via `@supabase/ssr`, Row Level Security)
+- **Hosting:** Vercel
+- **Version Control:** Git / GitHub
+
+## Why I Built This
+
+I wanted to build a complete full-stack project — covering frontend, database design, authentication, security, and deployment — using a real, relatable problem: helping ICT students choose modules based on peer reviews.
+
+## Architecture
+
+The frontend communicates directly with Supabase using the `supabase-js` client (separate browser and server clients via `@supabase/ssr`, so both client-side interactivity and server-rendered pages correctly know who's logged in). Access control is enforced with Row Level Security (RLS) policies at the database level — for example, only authenticated users can submit reviews, and users can only edit or delete their own.
+
+## Running Locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/srirav05/suss-module-reviews.git
+cd suss-module-reviews
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env.local` file with your own Supabase project credentials:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Then run:
+```bash
+npm run dev
+```
 
-## Learn More
+## What I'd Improve Next
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Pagination for large module lists
+- Admin moderation tools for reviews
+- Expand the recommendation assistant's keyword matching
+- Notification emails when someone reviews a module you follow
